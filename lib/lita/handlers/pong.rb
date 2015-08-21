@@ -94,6 +94,7 @@ module Lita
           #{no_limit ? "" : "LIMIT 10"}
         SQL
         msg = result.map{|m| "#{m["rowid"]}: #{format_time(m["created_at"])} - #{obfuscate(m["winner"])} > #{obfuscate(m["loser"])}"}.join("\n")
+        msg = "```#{msg}```"
         if result.empty?
           response.reply("no matches found")
         elsif no_limit && result.size > 10

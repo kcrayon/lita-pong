@@ -255,9 +255,9 @@ module Lita
       def db
         @db ||= begin
           Elo.configure do |elo|
-            elo.default_rating = Lita.config.default_rating
-            elo.pro_rating_boundry = Lita.config.pro_rating_boundry
-            elo.starter_boundry = Lita.config.starter_boundry
+            elo.default_rating = config.default_rating
+            elo.pro_rating_boundry = config.pro_rating_boundry
+            elo.starter_boundry = config.starter_boundry
           end
 
           db = SQLite3::Database.new(config.database)

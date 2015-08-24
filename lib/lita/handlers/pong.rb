@@ -58,7 +58,7 @@ module Lita
         when "delete-match"
           id = response.match_data[:arg]
           match = db.execute("SELECT * FROM matches WHERE ROWID = ?", id).first
-          if match.count == 1
+          if match
             db.execute("DELETE FROM matches WHERE ROWID = ?", id)
             update_all
             response.reply("deleted #{id}: #{format_time(match["created_at"])} - #{obfuscate(match["winner"])} > #{obfuscate(match["loser"])}")

@@ -193,7 +193,7 @@ module Lita
       end
 
       def update_all
-        db.execute("DELETE FROM players")
+        db.execute("UPDATE players SET games_played = 0, is_pro = 0, rating = ?", Elo.configure{|c| c.default_rating})
         db.execute("DELETE FROM player_histories")
         db.execute("SELECT * FROM matches").each do |match|
           update_players(:winner => match["winner"], :loser => match["loser"])
@@ -255,12 +255,6 @@ module Lita
 
       def db
         @db ||= begin
-          Elo.configure do |elo|
-            elo.default_rating = config.default_rating
-            elo.pro_rating_boundry = config.pro_rating_boundry
-            elo.starter_boundry = config.starter_boundry
-          end
-
           db = SQLite3::Database.new(config.database)
           db.execute("CREATE TABLE IF NOT EXISTS matches (winner TEXT NOT NULL, loser TEXT NOT NULL, created_at TEXT NOT NULL)")
           db.execute("CREATE TABLE IF NOT EXISTS player_histories (name TEXT NOT NULL, rating INT NOT NULL, created_at TEXT NOT NULL)")
